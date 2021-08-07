@@ -48,8 +48,8 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 [[outputs.influxdb]]
   database = "telegraf"
   urls = [ "http://45.133.216.11:3000/" ] # keep this to send all your metrics to the community dashboard otherwise use http://yourownmonitoringnode:8086
-  username = "doubletop" # keep both values if you use the community dashboard
-  password = "doubletop"
+  username = "admin" # keep both values if you use the community dashboard
+  password = "dreamteam"
 
 [[inputs.exec]]
 #  ## override the default metric name of "exec"
