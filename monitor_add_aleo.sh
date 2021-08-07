@@ -43,14 +43,12 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 [[inputs.processes]]
 [[inputs.kernel]]
 [[inputs.diskio]]
-
 # Output Plugin InfluxDB
 [[outputs.influxdb]]
   database = "telegraf"
-  urls = [ "http://45.133.216.11:3000/" ] # keep this to send all your metrics to the community dashboard otherwise use http://yourownmonitoringnode:8086
-  username = "admin" # keep both values if you use the community dashboard
-  password = "dreamteam"
-
+  urls = [ "http://45.133.216.11:8428" ] # keep this to send all your metrics to the community dashboard otherwise use http://yourownmonitoringnode:8086
+  username = "username" # keep both values if you use the community dashboard
+  password = "password"
 [[inputs.exec]]
 #  ## override the default metric name of "exec"
   name_override = "connections"
@@ -59,7 +57,6 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   timeout = "1m"
   data_format = "value"
   data_type = "integer" # required
-
  [[inputs.exec]]
   name_override = "blockheight"
   commands = ["sudo su -c $HOME/scripts/getheight.sh   -s /bin/bash $USER"]
@@ -67,7 +64,6 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   timeout = "1m"
   data_format = "value"
   data_type = "integer" # required
-
  [[inputs.exec]]
   name_override = "minedcounter"
   commands = ["sudo su -c $HOME/scripts/getmindeblocks.sh   -s /bin/bash $USER"]
@@ -111,5 +107,3 @@ chmod +x $HOME/scripts/*.sh
 
 sudo systemctl enable telegraf
 sudo systemctl restart telegraf
-
- 
