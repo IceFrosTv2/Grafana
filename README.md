@@ -1,4 +1,5 @@
 # Grafana
+```
 apt update 
 apt install curl 
 git clone https://github.com/IceFrosTv2/Grafana 
