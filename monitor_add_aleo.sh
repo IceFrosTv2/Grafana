@@ -43,12 +43,14 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
 [[inputs.processes]]
 [[inputs.kernel]]
 [[inputs.diskio]]
+
 # Output Plugin InfluxDB
 [[outputs.influxdb]]
   database = "telegraf"
-  urls = [ "http://45.133.216.11:8428" ] # keep this to send all your metrics to the community dashboard otherwise use http://yourownmonitoringnode:8086
-  username = "username" # keep both values if you use the community dashboard
-  password = "password"
+  urls = [ "http://vm.razumv.tech:8080" ] # keep this to send all your metrics to the community dashboard otherwise use http://yourownmonitoringnode:8086
+  username = "doubletop" # keep both values if you use the community dashboard
+  password = "doubletop"
+
 [[inputs.exec]]
 #  ## override the default metric name of "exec"
   name_override = "connections"
@@ -57,6 +59,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   timeout = "1m"
   data_format = "value"
   data_type = "integer" # required
+
  [[inputs.exec]]
   name_override = "blockheight"
   commands = ["sudo su -c $HOME/scripts/getheight.sh   -s /bin/bash $USER"]
@@ -64,6 +67,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   timeout = "1m"
   data_format = "value"
   data_type = "integer" # required
+
  [[inputs.exec]]
   name_override = "minedcounter"
   commands = ["sudo su -c $HOME/scripts/getmindeblocks.sh   -s /bin/bash $USER"]
@@ -71,7 +75,7 @@ cat <<EOF | sudo tee /etc/telegraf/telegraf.conf
   timeout = "1m"
   data_format = "value"
   data_type = "integer" # required
-  
+
  [[inputs.exec]]
   name_override = "getversion"
   commands = ["sudo su -c $HOME/scripts/getversion.sh   -s /bin/bash $USER"]
@@ -95,12 +99,12 @@ EOF
 
 sudo tee <<EOF >/dev/null $HOME/scripts/getmindeblocks.sh
 #!/bin/bash
-curl -s --data-binary '{"jsonrpc": "2.0", "id":"documentation", "method": "getnodestats", "params": [] }' -H 'content-type: application/json' http://localhost:3030/ | jq '.[].misc?.blocks_mined?'        
+curl -s --data-binary '{"jsonrpc": "2.0", "id":"documentation", "method": "getnodestats", "params": [] }' -H 'content-type: application/json' http://localhost:3030/ | jq '.[].blocks?.mined?'
 EOF
 
 sudo tee <<EOF >/dev/null $HOME/scripts/getversion.sh
 #!/bin/bash
-$HOME/snarkOS/target/release/snarkos --help | grep -o '[0-9]*\.[0-9]*\.[0-9]*' | sed -e 's/[^0-9]//g'      
+$HOME/snarkOS/target/release/snarkos --help | grep -o '[0-9]*\.[0-9]*\.[0-9]*' | sed -e 's/[^0-9]//g'
 EOF
 
 chmod +x $HOME/scripts/*.sh
